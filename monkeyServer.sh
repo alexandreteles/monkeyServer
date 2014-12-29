@@ -197,8 +197,6 @@ sed -i 's/UDPFLOOD_ALLOWUSER = \"named\"/UDPFLOOD_ALLOWUSER = \"named nsd\"/g' /
 
 echo "Disabling CSF Testing mode (activates firewall)..."
 sed -i 's/TESTING = "1"/TESTING = "0"/g' /etc/csf/csf.conf
-sysv-rc-conf csf on
-sysv-rc-conf lfd on
 csf -r
 
 echo "Starting firewall..."
