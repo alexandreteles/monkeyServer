@@ -1,7 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
 read -p "Press [Enter] key to continue the installation process..."
+
+echo "Removing uneeded packages..."
+apt-get remove apache2 bind9 samba sendmail
+
+echo "Disabling uneeded services..."
+update-rc.d xinetd disable
+update-rc.d saslauthd disable
 
 echo "Installing PolarSSL build dependencies..."
 apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get -y install build-essential cmake openssl libssl-dev
@@ -44,9 +51,9 @@ echo "Extracting sources and entering source dir..."
 tar zxvf monkey-1*
 cd monkey-1*
 
-echo "COnfiguring build dependencies and flags..."
+echo "Configuring build dependencies and flags..."
 CFLAGS="-I/usr/local/include/polarssl/" \
-LDFLAGS="-L/tmp/polarssl-1.3.9/library/ -Wl,-rpath=/tmp/polarssl-1.3.9/library/ \
+LDFLAGS="-L/tmp/polarssl-1.3.9/library/ -Wl,-rpath=/tmp/polarssl-1.3.9/library/" \
 ./configure --prefix=/usr/local \
 --datadir=/srv/www \
 --logdir=/var/log/monkey \
@@ -54,8 +61,8 @@ LDFLAGS="-L/tmp/polarssl-1.3.9/library/ -Wl,-rpath=/tmp/polarssl-1.3.9/library/ 
 --safe-free \
 --default-user=monkey \
 --default-port=80 \
---enable-plugins=auth,liana,logger,fastcgi,dirlisting,auth,polarssl,palm,mandril,cheetah \
---disable-plugins=cgi,liana_ssl
+--enable-plugins=auth,liana,liana_ssl,logger,fastcgi,dirlisting,auth,polarssl,palm,mandril,cheetah,reverse_proxy
+
 
 echo "Compiling and installing monkey web server..."
 make
@@ -64,5 +71,5 @@ make install
 echo "Setting the user monkey as owner of /var/log/monkey..."
 chown -R monkey:monkey /var/log/monkey
 
-echo "Adding monkey web server to the system startup..."
-(crontab -l ; echo "@reboot /usr/local/bin/monkey -D")| crontab -
+echo "Installing supervisor to control monkey web server startup and failures..."
+apt-get install -y supervisor
