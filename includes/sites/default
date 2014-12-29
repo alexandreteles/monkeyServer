@@ -51,4 +51,7 @@
     # Per-vhost CGI matching, same rules as with the global match
     # Match /cgi-bin/.*\.cgi
 
-
+[AUTH]
+    Location /sqladmin
+    Title    "Please, type your credentials to continue."
+    Users    /usr/local/etc/monkey/plugins/auth/users.mk
