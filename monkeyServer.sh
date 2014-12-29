@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+echo "This script is licensed under the GPLv3 License. Take a look at LICENSE file to learn more."
+echo "Written by Alexandre Teles - EJECT-UFBA"
 
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
 read -p "Press [Enter] key to continue the installation process..."
@@ -88,6 +90,7 @@ echo "Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugin
 echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
 echo "Load /usr/local/plugins/monkey-liana.so" >> /usr/local/etc/monkey/plugins.load
 echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-auth.so" >> /usr/local/etc/monkey/plugins.load
 mv /usr/local/etc/monkey/sites/default /usr/local/etc/monkey/sites/default.default
 wget -P /usr/local/etc/monkey/sites/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/sites/default
 
@@ -107,3 +110,26 @@ mv /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf /usr/local/etc/monkey/plug
 wget -P /usr/local/etc/monkey/plugins/fastcgi/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/plugins/fastcgi/fastcgi.conf
 mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.default
 wget -P /etc/php5/fpm/pool.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/php5/www.conf
+
+echo "Configuring MariaDB repositories..."
+apt-get install -y python-software-properties
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main'
+
+echo "Installing MariaDB..."
+echo "Please, pay attention at this step as you will be required to insert your MariaDB root password."
+apt-get update && apt-get install -y mariadb-server
+
+echo "Installing SQL Admin..."
+mkdir -p /srv/www/sqladmin/
+wget -P /srv/www/sqladmin/ -O index.php http://downloads.sourceforge.net/adminer/adminer-4.1.0.php
+wget -P /srv/www/sqladmin/ https://raw.github.com/vrana/adminer/master/designs/pokorny/adminer.css
+
+read -p "Please, type the username that you will use to access the SQL Admin interface: " ADMINERUSER
+read -p "Please, type the password that you will use to access the SQL Admin interface: " ADMINERPASS
+
+echo "Configuring SQL Admin authentication..."
+mk_passwd -c /usr/local/etc/monkey/plugins/auth/users.mk  ${ADMINERUSER} ${ADMINERPASS}
+
+echo "All done. Please restart your machine now or start monkey web server using: banana start."
+echo "Thank you!"
