@@ -4,7 +4,7 @@ echo "Take a look at LICENSE file on our GIT repo to learn more.\n"
 echo "Written by Alexandre Teles - EJECT-UFBA\n\n"
 
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
-echo "MonkeyServer.sh will install a firewall (CSF) a IDS (LFD) and a light MTA to mail information as well."
+echo "MonkeyServer.sh will install a firewall (CSF) a IDS (LFD) and a light MTA to handle mail information as well."
 read -p "Press [Enter] key to continue the installation process or CTRL+C to exit..." keep
 
 echo "Updating system..."
