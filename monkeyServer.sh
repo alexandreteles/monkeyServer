@@ -68,8 +68,42 @@ echo "Compiling and installing monkey web server..."
 make
 make install
 
-echo "Setting the user monkey as owner of /var/log/monkey..."
+echo "Setting the user monkey as owner of /var/log/monkey and /var/run/monkey..."
 chown -R monkey:monkey /var/log/monkey
+mkdir -p/ /var/run/monkey/supervisor
+chown -R monkey:monkey /var/run/monkey
 
 echo "Installing supervisor to control monkey web server startup and failures..."
 apt-get install -y supervisor
+
+echo "Installing monkey Supervisor config file..."
+wget -P /etc/supervisor/conf.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/supervisor/monkey.conf
+
+echo "Installing monkey config files..."
+mv /usr/local/etc/monkey/monkey.conf monkey.conf.default
+wget -P /usr/local/etc/monkey/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/conf/monkey.conf
+echo "#CUSTOM MonkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-dirlisting.so" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-liana.so" >> /usr/local/etc/monkey/plugins.load
+echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
+mv /usr/local/etc/monkey/sites/default /usr/local/etc/monkey/sites/default.default
+wget -P /usr/local/etc/monkey/sites/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/sites/default
+
+echo "Configuring dotDeb repositories..."
+touch /etc/apt/sources.list.d/dotdeb.list
+echo "deb http://packages.dotdeb.org stable all" >> /etc/apt/sources.list.d/dotdeb.list
+echo "deb-src http://packages.dotdeb.org stable all" >> /etc/apt/sources.list.d/dotdeb.list
+
+echo "Installing dotDeb GPG keys..."
+wget -q -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add -
+
+echo "Installing PHP-FPM and basic modules..."
+apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get install php5-fpm php5-mcrypt php5-mysqlnd php5-sqlite php-pear php5-gd php-xml-serializer
+
+echo "Configuring monkey fastcgi plugin and PHP-FPM pool..."
+mv /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf.default
+wget -P /usr/local/etc/monkey/plugins/fastcgi/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/plugins/fastcgi/fastcgi.conf
+mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.default
+wget -P /etc/php5/fpm/pool.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/php5/www.conf
