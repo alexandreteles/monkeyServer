@@ -85,19 +85,20 @@ chown -R monkey:monkey /usr/local/run/monkey
 
 echo "Installing monkey web server init file..."
 wget -P /etc/init.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/init.d/monkey
+chmod 755 /etc/init.d/monkey
 update-rc.d monkey defaults
 update-rc.d monkey enable
 
 echo "Installing monkey config files..."
 mv /usr/local/etc/monkey/monkey.conf monkey.conf.default
 wget -P /usr/local/etc/monkey/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/conf/monkey.conf
-echo "#CUSTOM MonkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-dirlisting.so" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-liana.so" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
-echo "Load /usr/local/plugins/monkey-auth.so" >> /usr/local/etc/monkey/plugins.load
+echo "    #CUSTOM MonkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-dirlisting.so" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-liana.so" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
+echo "    Load /usr/local/plugins/monkey-auth.so" >> /usr/local/etc/monkey/plugins.load
 mv /usr/local/etc/monkey/sites/default /usr/local/etc/monkey/sites/default.default
 wget -P /usr/local/etc/monkey/sites/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/sites/default
 
@@ -125,6 +126,7 @@ add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/d
 
 echo "Installing MariaDB..."
 echo "Please, pay attention at this step as you will be required to insert your MariaDB root password."
+read -p "Press [Enter] key to continue..." keep
 apt-get update -y && apt-get install -y mariadb-server
 
 echo "Installing SQL Admin..."
