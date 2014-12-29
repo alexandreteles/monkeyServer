@@ -80,8 +80,8 @@ cd -
 echo "Setting the user monkey as owner of /var/log/monkey and /var/run/monkey..."
 mkdir -p /var/log/monkey
 chown -R monkey:monkey /var/log/monkey
-mkdir -p /var/run/monkey/supervisor
-chown -R monkey:monkey /var/run/monkey
+mkdir -p /usr/local/run/monkey/supervisor
+chown -R monkey:monkey /usr/local/run/monkey
 
 echo "Installing supervisor to control monkey web server startup and failures..."
 apt-get install -y supervisor
