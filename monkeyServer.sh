@@ -6,7 +6,7 @@ echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, Ma
 read -p "Press [Enter] key to continue the installation process..."
 
 echo "Removing uneeded packages..."
-apt-get remove apache2 bind9 samba sendmail
+apt-get remove -y apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-bin apache2.2-common bind9 bind9-host bind9utils libbind9-80 rpcbind samba sendmail rmail sendmail-base sendmail-bin sendmail-cf sendmail-doc
 
 echo "Disabling uneeded services..."
 update-rc.d xinetd disable
