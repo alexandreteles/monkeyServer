@@ -1,19 +1,24 @@
-#!/bin/bash
-echo "This script is licensed under the GPLv3 License. Take a look at LICENSE file to learn more."
-echo "Written by Alexandre Teles - EJECT-UFBA"
+#!/bin/sh
+echo "This script is licensed under the GPLv3 License."
+echo "Take a look at LICENSE file on our GIT repo to learn more.\n"
+echo "Written by Alexandre Teles - EJECT-UFBA\n\n"
 
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
-read -p "Press [Enter] key to continue the installation process..."
+echo "MonkeyServer.sh will install a firewall (CSF) a IDS (LFD) and a light MTA to mail information as well."
+read -p "Press [Enter] key to continue the installation process or CTRL+C to exit..."
 
 echo "Updating system..."
-apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y sysv-rc-conf
 
 echo "Removing uneeded packages..."
 apt-get remove -y apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-bin apache2.2-common bind9 bind9-host bind9utils libbind9-80 rpcbind samba sendmail rmail sendmail-base sendmail-bin sendmail-cf sendmail-doc
 
 echo "Disabling uneeded services..."
-update-rc.d xinetd disable
-update-rc.d saslauthd disable
+sysv-rc-conf xinetd off
+sysv-rc-conf saslauthd off
+
+echo "Installing Exim4 MTA and re-enabling cron..."
+apt-get install -y exim4-daemon-light cron
 
 echo "Installing PolarSSL build dependencies..."
 apt-get -y install build-essential cmake openssl libssl-dev
@@ -38,9 +43,9 @@ echo "Installing PolarSSL libraries..."
 make install
 
 echo "Exiting build directory..."
-cd ../
+cd -
 
-echo "Creating web directory..."
+echo "Creating web root directory..."
 mkdir -p /srv/www
 
 echo "Creating web server user and group..."
@@ -55,7 +60,8 @@ cd monkey-1*
 
 echo "Configuring build dependencies and flags..."
 CFLAGS="-I/usr/local/include/polarssl/" \
-LDFLAGS="-L/tmp/polarssl-1.3.9/library/ -Wl,-rpath=/tmp/polarssl-1.3.9/library/" \
+LDFLAGS="-L/usr/local/lib/ -Wl,-rpath=/usr/local/lib/"
+
 ./configure --prefix=/usr/local \
 --datadir=/srv/www \
 --logdir=/var/log/monkey \
@@ -69,6 +75,7 @@ LDFLAGS="-L/tmp/polarssl-1.3.9/library/ -Wl,-rpath=/tmp/polarssl-1.3.9/library/"
 echo "Compiling and installing monkey web server..."
 make
 make install
+cd -
 
 echo "Setting the user monkey as owner of /var/log/monkey and /var/run/monkey..."
 mkdir -p /var/log/monkey
@@ -131,6 +138,72 @@ read -p "Please, type the password that you will use to access the SQL Admin int
 
 echo "Configuring SQL Admin authentication..."
 mk_passwd -c /usr/local/etc/monkey/plugins/auth/users.mk  ${ADMINERUSER} ${ADMINERPASS}
+
+echo "Entering /tmp dir..."
+cd /tmp
+
+echo "Donwloading ConfigServer Firewall..."
+wget http://www.configserver.com/free/csf.tgz
+
+echo "Extractin sources and entering dir..."
+tar -xzf csf.tgz
+cd csf
+
+echo "Installing CSF and dependencies..."
+apt-get install -y libwww-perl
+sh install.sh
+
+echo "Verifying IPTables modules..."
+perl /usr/local/csf/bin/csftest.pl
+
+# CSF configuration adapted from Centminmod
+
+echo "Configuring CSF firewall..."
+EMAIL="root@localhost"
+cp -a /etc/csf/csf.conf /etc/csf/csf.conf-bak
+egrep '^UDP_|^TCP_|^DROP_NOLOG' /etc/csf/csf.conf
+cat >>/etc/csf/csf.pignore<<EOF
+user:mysql
+exe:/usr/sbin/mysqld
+cmd:/usr/sbin/mysqld
+user:monkey
+exe:/usr/local/bin/banana
+exe:/usr/local/bin/monkey
+EOF
+sed -i "s/LF_ALERT_TO = ""/LF_ALERT_TO = "$EMAIL"/g" /etc/csf/csf.conf
+sed -i 's/LF_DSHIELD = "0"/LF_DSHIELD = "86400"/g' /etc/csf/csf.conf
+sed -i 's/LF_SPAMHAUS = "0"/LF_SPAMHAUS = "86400"/g' /etc/csf/csf.conf
+sed -i 's/LF_EXPLOIT = "300"/LF_EXPLOIT = "86400"/g' /etc/csf/csf.conf
+sed -i 's/LF_DIRWATCH = "300"/LF_DIRWATCH = "86400"/g' /etc/csf/csf.conf
+sed -i 's/LF_INTEGRITY = "3600"/LF_INTEGRITY = "0"/g' /etc/csf/csf.conf
+sed -i 's/LF_PARSE = "5"/LF_PARSE = "20"/g' /etc/csf/csf.conf
+sed -i 's/LF_PARSE = "600"/LF_PARSE = "20"/g' /etc/csf/csf.conf
+sed -i 's/PS_LIMIT = "10"/PS_LIMIT = "15"/g' /etc/csf/csf.conf
+sed -i 's/PT_LIMIT = "60"/PT_LIMIT = "0"/g' /etc/csf/csf.conf
+sed -i 's/PT_USERPROC = "10"/PT_USERPROC = "0"/g' /etc/csf/csf.conf
+sed -i 's/PT_USERMEM = "200"/PT_USERMEM = "0"/g' /etc/csf/csf.conf
+sed -i 's/PT_USERTIME = "1800"/PT_USERTIME = "0"/g' /etc/csf/csf.conf
+sed -i 's/PT_LOAD = "30"/PT_LOAD = "600"/g' /etc/csf/csf.conf
+sed -i 's/PT_LOAD_AVG = "5"/PT_LOAD_AVG = "15"/g' /etc/csf/csf.conf
+sed -i 's/PT_LOAD_LEVEL = "6"/PT_LOAD_LEVEL = "8"/g' /etc/csf/csf.conf
+sed -i 's/LF_DISTATTACK = "0"/LF_DISTATTACK = "1"/g' /etc/csf/csf.conf
+sed -i 's/LF_DISTFTP = "0"/LF_DISTFTP = "1"/g' /etc/csf/csf.conf
+sed -i 's/LF_DISTFTP_UNIQ = "3"/LF_DISTFTP_UNIQ = "6"/g' /etc/csf/csf.conf
+sed -i 's/LF_DISTFTP_PERM = "3600"/LF_DISTFTP_PERM = "6000"/g' /etc/csf/csf.conf
+sed -i 's/DENY_IP_LIMIT = \"100\"/DENY_IP_LIMIT = \"200\"/' /etc/csf/csf.conf
+sed -i 's/DENY_TEMP_IP_LIMIT = \"100\"/DENY_TEMP_IP_LIMIT = \"200\"/' /etc/csf/csf.conf
+sed -i 's/UDPFLOOD = \"0\"/UDPFLOOD = \"1\"/g' /etc/csf/csf.conf
+sed -i 's/UDPFLOOD_ALLOWUSER = \"named\"/UDPFLOOD_ALLOWUSER = \"named nsd\"/g' /etc/csf/csf.conf
+
+echo "Disabling CSF Testing mode (activates firewall)..."
+sed -i 's/TESTING = "1"/TESTING = "0"/g' /etc/csf/csf.conf
+sysv-rc-conf csf on
+sysv-rc-conf lfd on
+csf -r
+
+echo "Starting firewall..."
+service csf restart
+service lfd start
 
 echo "All done. Please restart your machine now or start monkey web server using: banana start."
 echo "Thank you!"
