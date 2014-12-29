@@ -5,6 +5,9 @@ echo "Written by Alexandre Teles - EJECT-UFBA"
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
 read -p "Press [Enter] key to continue the installation process..."
 
+echo "Updating system..."
+apt-get update && apt-get upgrade && apt-get dist-upgrade
+
 echo "Removing uneeded packages..."
 apt-get remove -y apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-bin apache2.2-common bind9 bind9-host bind9utils libbind9-80 rpcbind samba sendmail rmail sendmail-base sendmail-bin sendmail-cf sendmail-doc
 
@@ -13,7 +16,7 @@ update-rc.d xinetd disable
 update-rc.d saslauthd disable
 
 echo "Installing PolarSSL build dependencies..."
-apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get -y install build-essential cmake openssl libssl-dev
+apt-get -y install build-essential cmake openssl libssl-dev
 
 echo "Entering temp. dir..."
 cd /tmp/
