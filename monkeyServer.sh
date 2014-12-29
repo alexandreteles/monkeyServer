@@ -83,11 +83,10 @@ chown -R monkey:monkey /var/log/monkey
 mkdir -p /usr/local/run/monkey/supervisor
 chown -R monkey:monkey /usr/local/run/monkey
 
-echo "Installing supervisor to control monkey web server startup and failures..."
-apt-get install -y supervisor
-
-echo "Installing monkey Supervisor config file..."
-wget -P /etc/supervisor/conf.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/supervisor/monkey.conf
+echo "Installing monkey web server init file..."
+wget -P /etc/init.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/init.d/monkey
+update-rc.d monkey defaults
+update-rc.d monkey enable
 
 echo "Installing monkey config files..."
 mv /usr/local/etc/monkey/monkey.conf monkey.conf.default
@@ -198,6 +197,10 @@ sed -i 's/UDPFLOOD_ALLOWUSER = \"named\"/UDPFLOOD_ALLOWUSER = \"named nsd\"/g' /
 echo "Disabling CSF Testing mode (activates firewall)..."
 sed -i 's/TESTING = "1"/TESTING = "0"/g' /etc/csf/csf.conf
 csf -r
+update-rc.d csf defaults
+update-rc.d csf enable
+update-rc.d lfd defaults
+update-rc.d lfd enable
 
 echo "Starting firewall..."
 service csf restart
