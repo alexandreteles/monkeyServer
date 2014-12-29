@@ -25,7 +25,7 @@ echo "Downloading PolarSSL sources..."
 wget https://polarssl.org/download/latest-stable
 
 echo "Extracting PolarSSL sources and entering source dir..."
-tar xvzf latest-stable
+tar xzf latest-stable
 cd polarssl-1.*
 
 echo "Configuring build environment..."
@@ -40,9 +40,6 @@ make install
 echo "Exiting build directory..."
 cd ../
 
-echo "Removing apache2 Web Server..."
-apt-get -y remove apache2
-
 echo "Creating web directory..."
 mkdir -p /srv/www
 
@@ -53,7 +50,7 @@ echo "Downloading monkey web server sources..."
 wget http://monkey-project.com/releases/1.5/monkey-1.5.5.tar.gz
 
 echo "Extracting sources and entering source dir..."
-tar zxvf monkey-1*
+tar zxf monkey-1*
 cd monkey-1*
 
 echo "Configuring build dependencies and flags..."
@@ -74,8 +71,9 @@ make
 make install
 
 echo "Setting the user monkey as owner of /var/log/monkey and /var/run/monkey..."
+mkdir -p /var/log/monkey
 chown -R monkey:monkey /var/log/monkey
-mkdir -p/ /var/run/monkey/supervisor
+mkdir -p /var/run/monkey/supervisor
 chown -R monkey:monkey /var/run/monkey
 
 echo "Installing supervisor to control monkey web server startup and failures..."
@@ -106,7 +104,7 @@ echo "Installing dotDeb GPG keys..."
 wget -q -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add -
 
 echo "Installing PHP-FPM and basic modules..."
-apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get install php5-fpm php5-mcrypt php5-mysqlnd php5-sqlite php-pear php5-gd php-xml-serializer
+apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y php5-fpm php5-mcrypt php5-mysqlnd php5-sqlite php-pear php5-gd php-xml-serializer
 
 echo "Configuring monkey fastcgi plugin and PHP-FPM pool..."
 mv /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf.default
@@ -121,7 +119,7 @@ add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/d
 
 echo "Installing MariaDB..."
 echo "Please, pay attention at this step as you will be required to insert your MariaDB root password."
-apt-get update && apt-get install -y mariadb-server
+apt-get update -y && apt-get install -y mariadb-server
 
 echo "Installing SQL Admin..."
 mkdir -p /srv/www/sqladmin/
