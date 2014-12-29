@@ -25,7 +25,7 @@ echo "Downloading PolarSSL sources..."
 wget https://polarssl.org/download/latest-stable
 
 echo "Extracting PolarSSL sources and entering source dir..."
-tar xvzf polarssl-1.*
+tar xvzf latest-stable
 cd polarssl-1.*
 
 echo "Configuring build environment..."
