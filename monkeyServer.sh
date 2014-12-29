@@ -5,7 +5,7 @@ echo "Written by Alexandre Teles - EJECT-UFBA\n\n"
 
 echo "This script will install LMPM stack (Linux, Monkey Web Server, PHP-FPM, MariaDB) on your machine."
 echo "MonkeyServer.sh will install a firewall (CSF) a IDS (LFD) and a light MTA to mail information as well."
-read -p "Press [Enter] key to continue the installation process or CTRL+C to exit..."
+read -p "Press [Enter] key to continue the installation process or CTRL+C to exit..." keep
 
 echo "Updating system..."
 apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y sysv-rc-conf
