@@ -129,7 +129,8 @@ apt-get update -y && apt-get install -y mariadb-server
 
 echo "Installing SQL Admin..."
 mkdir -p /srv/www/sqladmin/
-wget -P /srv/www/sqladmin/ -O index.php http://downloads.sourceforge.net/adminer/adminer-4.1.0.php
+wget -P /srv/www/sqladmin/ http://downloads.sourceforge.net/adminer/adminer-4.1.0.php
+mv /srv/www/sqladmin/adminer-4.1.0.php /srv/www/sqladmin/index.php
 wget -P /srv/www/sqladmin/ https://raw.github.com/vrana/adminer/master/designs/pokorny/adminer.css
 
 read -p "Please, type the username that you will use to access the SQL Admin interface: " ADMINERUSER
