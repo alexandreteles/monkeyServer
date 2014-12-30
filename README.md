@@ -60,6 +60,8 @@ monkeyServer.sh will build your stack with a very small set of PHP5 and Monkey W
 3. CPU: Don't Really Matter
 4. Distro: by now, only Debian Stable is supported
 
+P.S.: You can, actually, cut the RAM requirement in a half. BUT, for the default flavor, this can be equal to really boring problems with MariaDB if you use InnoDB. So, we will say that minimum memory requirement to have a realiable server operation. Using less than that should work (with PHP-FPM tweaking you can run the noSQL with 16-24MB and the default with 32-64MB if you tweak MariaDB too) but is not recommended. In the near future, the embedded version should require only 8MB and the tweaks for PHP-FPM and MariaDB should be integrated.
+
 ## HOW TO INSTALL ##
 Just run `/usr/bin/env bash <((wget -qO - https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/monkeyServer.sh))` as root and follow the script instructions.
 
