@@ -66,7 +66,7 @@ Just run `/usr/bin/env bash <((wget -qO - https://raw.githubusercontent.com/alex
 If you want to install the noSQL flavor, just run `/usr/bin/env bash <((wget -qO - https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/monkeyServer_noSQL.sh))` as root and follow the script instructions.
 
 ## HOW TO OBTAIN SUPPORT ##
-Here at Low End Talk or at the [issue page](https://github.com/alexandreteles/monkeyServer/issues) of the project at GitHub.
+At Low End Talk [official thread](http://lowendtalk.com/discussion/39893/debian-monkeyserver-sh-a-script-to-install-a-full-web-stack-at-lebs-in-5-minutes) or at the [issue page](https://github.com/alexandreteles/monkeyServer/issues) of the project at GitHub.
 
 ## WHAT IS PLANNED ##
 1. A menu based installation (this will join the default and the noSQL versions);
