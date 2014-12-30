@@ -2,7 +2,7 @@
 
 ![Monkey Web Server](https://i.imgur.com/jiQdi6e.png)
 
-monkeyServer.sh is a simples shell script made to install a full web stack at low end boxes in about 5 minutes. It is built on top of [Monkey Web Server](http://monkey-project.com/), a really simple but feature rich web server. Monkey is really fast and stable, increadibly small and light on resources.
+monkeyServer.sh is a simple shell script made to install a full web stack at low end boxes in about 5 minutes. It is built on top of [Monkey Web Server](http://monkey-project.com/), a really simple but feature rich web server. Monkey is really fast and stable, increadibly small and light on resources.
 
 ## WHAT IS INCLUDED ##
 monkeyServer.sh comes in two flavors:
