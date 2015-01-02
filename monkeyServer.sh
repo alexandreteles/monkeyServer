@@ -196,11 +196,11 @@ function install_phpfpm {
 
 function restart_monkey {
 	echo "Restarting IPv4 monkey instance..."
-	service monkey restart
+	service monkey restart > /dev/null
 	if [ -f /etc/init.d/monkeyIPv6 ]
 	then
 		echo "Restarting IPv6 monkey instance..."
-    	service monkeyIPv6 restart
+    	service monkeyIPv6 restart > /dev/null
 	fi
 	echo "Done."
 	clear
