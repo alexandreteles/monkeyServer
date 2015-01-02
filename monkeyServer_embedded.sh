@@ -87,6 +87,8 @@ update-rc.d monkey defaults
 update-rc.d monkey enable
 
 echo "Installing monkey config files..."
+mv /usr/local/etc/monkey/monkey.conf monkey.conf.default
+wget -P /usr/local/etc/monkey/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/conf/embedded/monkey.conf
 echo "    #CUSTOM MonkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
 echo "    Load /usr/local/plugins/monkey-dirlisting.so" >> /usr/local/etc/monkey/plugins.load
 echo "    Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
