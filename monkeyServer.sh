@@ -1,5 +1,5 @@
 #!/bin/bash
-function clean_system{
+function clean_system {
 	echo "Updating system..."
 	apt-get update -y > /dev/null && apt-get upgrade -y > /dev/null && apt-get dist-upgrade -y > /dev/null && apt-get install -y sysv-rc-conf > /dev/null
 
@@ -11,7 +11,7 @@ function clean_system{
 	sysv-rc-conf saslauthd off
 }
 
-function install_csf{
+function install_csf {
 	echo "Installing Exim4 MTA and re-enabling cron..."
 	apt-get install -y mailutils cron
 
@@ -86,7 +86,7 @@ EOF
 	service lfd start
 }
 
-function install_monkey{
+function install_monkey {
 	echo "Installing PolarSSL build dependencies..."
 	apt-get -y install build-essential cmake openssl libssl-dev
 
@@ -170,7 +170,7 @@ function install_monkey{
 	wget -P /usr/local/etc/monkey/sites/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/sites/default
 }
 
-function install_phpfpm{
+function install_phpfpm {
 	echo "Configuring dotDeb repositories..."
 	touch /etc/apt/sources.list.d/dotdeb.list
 	echo "deb http://packages.dotdeb.org stable all" >> /etc/apt/sources.list.d/dotdeb.list
@@ -191,7 +191,7 @@ function install_phpfpm{
 	restart_monkey
 }
 
-function restart_monkey{
+function restart_monkey {
 	echo "Restarting IPv4 monkey instance..."
 	service monkey restart
 	if [ -f /etc/init.d/monkeyIPv6 ]
@@ -202,7 +202,7 @@ function restart_monkey{
 	echo "Done."
 }
 
-function install_mariadb{
+function install_mariadb {
 	echo "Configuring MariaDB repositories..."
 	apt-get install -y python-software-properties
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
@@ -214,7 +214,7 @@ function install_mariadb{
 	apt-get update -y && apt-get install -y mariadb-server
 }
 
-function install_adminer{
+function install_adminer {
 	echo "Installing SQL Admin..."
 	echo "-----------------------"
 	echo "Avaiable vhosts: "
@@ -241,7 +241,7 @@ function install_adminer{
 	mk_passwd -c /usr/local/etc/monkey/plugins/auth/vhosts/${vHost}/users.mk ${admineruser} ${adminerpass}
 }
 
-function vhost_is_redirect{
+function vhost_is_redirect {
 	# function requires a argument: ${1} = $vhostname
 	read -p "URL to redirect: " redirecturl
 	touch /usr/local/etc/monkey/sites/${1}
@@ -255,7 +255,7 @@ function vhost_is_redirect{
     echo "" >> /usr/local/etc/monkey/sites/${1}
 }
 
-function vhost_is_site{
+function vhost_is_site {
 	mkdir -p /srv/www/${vhostname}
 	touch /usr/local/etc/monkey/sites/${1}
 	echo "[HOST]" >> /usr/local/etc/monkey/sites/${1}
@@ -265,11 +265,11 @@ function vhost_is_site{
 	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${1}
 	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${1}
 	echo "[ERROR_PAGES]" >> /usr/local/etc/monkey/sites/${1}
-    echo "    404  404.html" >> /usr/local/etc/monkey/sites/${1}
-    echo "" >> /usr/local/etc/monkey/sites/${1}
+        echo "    404  404.html" >> /usr/local/etc/monkey/sites/${1}
+        echo "" >> /usr/local/etc/monkey/sites/${1}
 }
 
-function create_vhost{
+function create_vhost {
 	echo "Creating new vhost..."
 	echo "---------------------"
 	read -p "Virtual host hostname: " vhostname
@@ -282,7 +282,7 @@ function create_vhost{
 	restart_monkey
 }
 
-function remove_vhost{
+function remove_vhost {
 	echo "Removing a existing vhost..."
 	echo "-----------------------"
 	echo "Avaiable vhosts: "
@@ -294,7 +294,7 @@ function remove_vhost{
 	restart_monkey
 }
 
-function enable_ipv6{
+function enable_ipv6 {
 	echo "Installing IPv6 support..."
 	wget -P /usr/local/etc/monkey/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/conf/monkeyIPv6.conf
 	echo "Installing monkeyIPv6 web server init file..."
@@ -304,7 +304,7 @@ function enable_ipv6{
 	update-rc.d monkeyIPv6 enable
 }
 
-function quit{
+function quit {
 	exit
 }
 
