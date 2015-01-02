@@ -309,8 +309,8 @@ function quit {
 }
 
 echo "This script is licensed under the GPLv3 License."
-echo "Take a look at LICENSE file on our GIT repo to learn more.\n"
-echo "Written by Alexandre Teles - EJECT-UFBA\n\n"
+echo -e "Take a look at LICENSE file on our GIT repo to learn more.\n"
+echo -e "Written by Alexandre Teles - EJECT-UFBA\n\n"
 
 echo "MonkeyServer.sh"
 echo "---------------"
@@ -327,7 +327,7 @@ do
 	echo "8. Create a new vhost"
 	echo "9. Remove a existing vhost"
 	echo "10. Exit monkeyServer.sh"
-	echo "---------------\n\n"
+	echo -e "---------------\n\n"
 
 	read -p "My option is: " option
 
