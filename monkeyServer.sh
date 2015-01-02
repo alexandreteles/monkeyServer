@@ -221,7 +221,7 @@ function install_mariadb {
 function install_adminer {
 	echo "Installing SQL Admin..."
 	echo "-----------------------"
-	echo "Avaiable vhosts: "
+	echo "Avaiable vhosts to install: "
 	find /srv/www/ -type d -exec basename {} \;
 	echo "-----------------------"
 	read -p "Install adminer to this vhost: " vHost
@@ -289,7 +289,7 @@ function remove_vhost {
 	echo "Removing a existing vhost..."
 	echo "-----------------------"
 	echo "Avaiable vhosts: "
-	find /usr/local/etc/monkey/sites/ -type d -exec basename {} \;
+	find /usr/local/etc/monkey/sites/ -type f -exec basename {} \;
 	echo "-----------------------"
 	read -p "Remove this vhost: " rmvhost
 	rm -f /usr/local/etc/monkey/sites/${rmvhost}
