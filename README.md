@@ -57,15 +57,13 @@ monkeyServer.sh will build your stack with a very small set of PHP5 and Monkey W
 ## MINIMUM REQUIREMENTS ##
 1. RAM: 128MB (or just 64MB if you use the noSQL option)
 2. HDD: 2GB
-3. CPU: Don't Really Matter
+3. CPU: X86, X86_64 or ARM.
 4. Distro: by now, only Debian Stable is supported
 
 P.S.: You can, actually, cut the RAM requirement in a half. BUT, for the default flavor, this can be equal to really boring problems with MariaDB if you use InnoDB. So, we will say that minimum memory requirement to have a realiable server operation. Using less than that should work (with PHP-FPM tweaking you can run the noSQL with 16-24MB and the default with 32-64MB if you tweak MariaDB too) but is not recommended. In the near future, the embedded version should require only 8MB and the tweaks for PHP-FPM and MariaDB should be integrated.
 
 ## HOW TO INSTALL ##
 Just run `/usr/bin/env bash <((wget -qO - https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/monkeyServer.sh))` as root and follow the script instructions.
-
-If you want to install the noSQL flavor, just run `/usr/bin/env bash <((wget -qO - https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/monkeyServer_noSQL.sh))` as root and follow the script instructions.
 
 ## HOW TO OBTAIN SUPPORT ##
 At Low End Talk [official thread](http://lowendtalk.com/discussion/39893/debian-monkeyserver-sh-a-script-to-install-a-full-web-stack-at-lebs-in-5-minutes) or at the [issue page](https://github.com/alexandreteles/monkeyServer/issues) of the project at GitHub.
