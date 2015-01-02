@@ -114,6 +114,9 @@ function install_monkey {
 
 	echo "Creating web root directory..."
 	mkdir -p /srv/www
+	
+	echo "Creating default vhost directory..."
+	mkdir -p /srv/www/default
 
 	echo "Creating web server user and group..."
 	useradd -s /usr/sbin/nologin -M -d /srv/www monkey
@@ -159,9 +162,8 @@ function install_monkey {
 	echo "Installing monkey config files..."
 	mv /usr/local/etc/monkey/monkey.conf monkey.conf.default
 	wget -P /usr/local/etc/monkey/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/conf/monkey.conf
-	echo "    #CUSTOM MonkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
+	echo "    #CUSTOM monkeyServer.sh plugins loading" >> /usr/local/etc/monkey/plugins.load
 	echo "    Load /usr/local/plugins/monkey-dirlisting.so" >> /usr/local/etc/monkey/plugins.load
-	echo "    Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
 	echo "    Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
 	echo "    Load /usr/local/plugins/monkey-liana.so" >> /usr/local/etc/monkey/plugins.load
 	echo "    Load /usr/local/plugins/monkey-logger.so" >> /usr/local/etc/monkey/plugins.load
@@ -187,6 +189,7 @@ function install_phpfpm {
 	wget -P /usr/local/etc/monkey/plugins/fastcgi/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/plugins/fastcgi/fastcgi.conf
 	mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.default
 	wget -P /etc/php5/fpm/pool.d/ https://raw.githubusercontent.com/alexandreteles/monkeyServer/master/includes/php5/www.conf
+	echo "    Load /usr/local/plugins/monkey-fastcgi.so" >> /usr/local/etc/monkey/plugins.load
 
 	restart_monkey
 }
