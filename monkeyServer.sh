@@ -13,7 +13,7 @@ function clean_system {
 
 function install_csf {
 	echo "Installing Exim4 MTA and re-enabling cron..."
-	apt-get install -y mailutils cron
+	apt-get install -y mailutils cron  > /dev/null
 
 	echo "Entering /tmp dir..."
 	cd /tmp
@@ -88,7 +88,7 @@ EOF
 
 function install_monkey {
 	echo "Installing PolarSSL build dependencies..."
-	apt-get -y install build-essential cmake openssl libssl-dev
+	apt-get -y install build-essential cmake openssl libssl-dev  > /dev/null
 
 	echo "Entering temp. dir..."
 	cd /tmp/
@@ -180,7 +180,7 @@ function install_phpfpm {
 	wget -q -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add -
 
 	echo "Installing PHP-FPM and basic modules..."
-	apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y php5-fpm php5-mcrypt php5-mysqlnd php5-sqlite php-pear php5-gd php-xml-serializer
+	apt-get update -y  > /dev/null && apt-get upgrade -y  > /dev/null && apt-get dist-upgrade -y  > /dev/null && apt-get install -y php5-fpm php5-mcrypt php5-mysqlnd php5-sqlite php-pear php5-gd php-xml-serializer  > /dev/null
 
 	echo "Configuring monkey fastcgi plugin and PHP-FPM pool..."
 	mv /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf /usr/local/etc/monkey/plugins/fastcgi/fastcgi.conf.default
@@ -211,7 +211,7 @@ function install_mariadb {
 	echo "Installing MariaDB..."
 	echo "Please, pay attention at this step as you will be required to insert your MariaDB root password..."
 	read -p "Press [Enter] key to continue..." keep
-	apt-get update -y && apt-get install -y mariadb-server
+	apt-get update -y > /dev/null && apt-get install -y mariadb-server  > /dev/null
 }
 
 function install_adminer {
@@ -228,10 +228,10 @@ function install_adminer {
 
 
 	echo "[AUTH]" >> /usr/local/etc/monkey/sites/${vHost}
-    echo "    Location /sqladmin"
-    echo '    Title    "Please, type your credentials to continue."' >> /usr/local/etc/monkey/sites/${vHost}
-    echo "    Users    /usr/local/etc/monkey/plugins/auth/vhosts/${vHost}/users.mk" >> /usr/local/etc/monkey/sites/${vHost}
-    echo "" >> /usr/local/etc/monkey/sites/${vHost}
+        echo "    Location /sqladmin"
+        echo '    Title    "Please, type your credentials to continue."' >> /usr/local/etc/monkey/sites/${vHost}
+        echo "    Users    /usr/local/etc/monkey/plugins/auth/vhosts/${vHost}/users.mk" >> /usr/local/etc/monkey/sites/${vHost}
+        echo "" >> /usr/local/etc/monkey/sites/${vHost}
 
 	read -p "Please, type the username that you will use to access the SQL Admin interface: " admineruser
 	read -p "Please, type the password that you will use to access the SQL Admin interface: " adminerpass
@@ -252,7 +252,7 @@ function vhost_is_redirect {
 	echo "[LOGGER]" >> /usr/local/etc/monkey/sites/${1}
 	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${1}
 	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${1}
-    echo "" >> /usr/local/etc/monkey/sites/${1}
+        echo "" >> /usr/local/etc/monkey/sites/${1}
 }
 
 function vhost_is_site {
@@ -312,11 +312,12 @@ echo "This script is licensed under the GPLv3 License."
 echo -e "Take a look at LICENSE file on our GIT repo to learn more.\n"
 echo -e "Written by Alexandre Teles - EJECT-UFBA\n\n"
 
-echo "MonkeyServer.sh"
-echo "---------------"
-
 while :
 do
+        echo -e "\n\n"
+        echo "MonkeyServer.sh"
+        echo "---------------"
+        echo -e "\n\n"
 	echo "1. Clean system (run this before installing the web server)"
 	echo "2. Install Monkey Web Server"
 	echo "3. Install PHP-FPM support"
