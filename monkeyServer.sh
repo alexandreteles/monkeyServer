@@ -203,6 +203,7 @@ function restart_monkey {
     	service monkeyIPv6 restart
 	fi
 	echo "Done."
+	clear
 }
 
 function install_mariadb {
@@ -245,42 +246,41 @@ function install_adminer {
 }
 
 function vhost_is_redirect {
-	# function requires a argument: ${1} = $vhostname
+	read -p "Virtual host hostname: " vhostname
 	read -p "URL to redirect: " redirecturl
-	touch /usr/local/etc/monkey/sites/${1}
-	echo "[HOST]" >> /usr/local/etc/monkey/sites/${1}
-	echo "    ServerName ${vhostname}" >> /usr/local/etc/monkey/sites/${1}
-	#echo "    DocumentRoot /srv/www/${vhostname}" >> /usr/local/etc/monkey/sites/${1}
-	echo "    Redirect ${redirecturl}" >> /usr/local/etc/monkey/sites/${1}
-	echo "[LOGGER]" >> /usr/local/etc/monkey/sites/${1}
-	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${1}
-	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${1}
-        echo "" >> /usr/local/etc/monkey/sites/${1}
+	touch /usr/local/etc/monkey/sites/${vhostname}
+	echo "[HOST]" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    ServerName ${vhostname}" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    Redirect ${redirecturl}" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "[LOGGER]" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${vhostname}
+        echo "" >> /usr/local/etc/monkey/sites/${vhostname}
 }
 
 function vhost_is_site {
+	read -p "Virtual host hostname: " vhostname
 	mkdir -p /srv/www/${vhostname}
-	touch /usr/local/etc/monkey/sites/${1}
-	echo "[HOST]" >> /usr/local/etc/monkey/sites/${1}
-	echo "    ServerName ${vhostname}" >> /usr/local/etc/monkey/sites/${1}
-	echo "    DocumentRoot /srv/www/${vhostname}" >> /usr/local/etc/monkey/sites/${1}
-	echo "[LOGGER]" >> /usr/local/etc/monkey/sites/${1}
-	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${1}
-	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${1}
-	echo "[ERROR_PAGES]" >> /usr/local/etc/monkey/sites/${1}
-        echo "    404  404.html" >> /usr/local/etc/monkey/sites/${1}
-        echo "" >> /usr/local/etc/monkey/sites/${1}
+	touch /usr/local/etc/monkey/sites/${vhostname}
+	echo "[HOST]" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    ServerName ${vhostname}" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    DocumentRoot /srv/www/${vhostname}" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "[LOGGER]" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    AccessLog /var/log/monkey/${1}.access.log" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "    ErrorLog /var/log/monkey/${1}.error.log" >> /usr/local/etc/monkey/sites/${vhostname}
+	echo "[ERROR_PAGES]" >> /usr/local/etc/monkey/sites/${vhostname}
+        echo "    404  404.html" >> /usr/local/etc/monkey/sites/${vhostname}
+        echo "" >> /usr/local/etc/monkey/sites/${vhostname}
 }
 
 function create_vhost {
 	echo "Creating new vhost..."
 	echo "---------------------"
-	read -p "Virtual host hostname: " vhostname
 	read -p "Do you want to redirect this vhost to a URL? (yes or no): " isredirect
 	if [[ "$isredirect" = "yes" ]]; then
-		vhost_is_redirect ${vhostname}
+		vhost_is_redirect
 	else
-		vhost_is_site ${vhostname}
+		vhost_is_site
 	fi
 	restart_monkey
 }
