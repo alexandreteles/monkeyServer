@@ -35,13 +35,13 @@ monkeyServer.sh will build your stack with a very small set of PHP5 and Monkey W
 ### MONKEY WEB SERVER MODULES ###
 1. auth
 2. liana
-3. liana_ssl
+3. liana_ssl (no longer supported)
 4. logger
 5. fastcgi
 6. dirlisting
 7. auth
 8. polarssl
-9. palm
+9. palm (no longer supported)
 10. mandril
 11. cheetah
 12. reverse_proxy
