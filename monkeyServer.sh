@@ -87,26 +87,26 @@ EOF
 }
 
 function install_monkey {
-	echo "Installing PolarSSL build dependencies..."
+	echo "Installing mbedTLS build dependencies..."
 	apt-get -y install build-essential cmake openssl libssl-dev  > /dev/null
 
 	echo "Entering temp. dir..."
 	cd /tmp/
 
-	echo "Downloading PolarSSL sources..."
-	wget https://polarssl.org/download/latest-stable
+	echo "Downloading mbedTLS sources..."
+	wget https://tls.mbed.org/download/latest-stable
 
-	echo "Extracting PolarSSL sources and entering source dir..."
+	echo "Extracting mbedTLS sources and entering source dir..."
 	tar xzf latest-stable
-	cd polarssl-1.*
+	cd mbedtls-1.*
 
 	echo "Configuring build environment..."
-	cmake -DUSE_SHARED_POLARSSL_LIBRARY=on .
+	cmake -DUSE_SHARED_MBEDTLS_LIBRARY=on .
 
-	echo "Compiling PolarSSL sources..."
+	echo "Compiling mbedTLS sources..."
 	make
 
-	echo "Installing PolarSSL libraries..."
+	echo "Installing mbedTLS libraries..."
 	make install
 
 	echo "Exiting build directory..."
@@ -122,7 +122,7 @@ function install_monkey {
 	useradd -s /usr/sbin/nologin -M -d /srv/www monkey
 
 	echo "Downloading monkey web server sources..."
-	wget http://monkey-project.com/releases/1.5/monkey-1.5.5.tar.gz
+	wget http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz
 
 	echo "Extracting sources and entering source dir..."
 	tar zxf monkey-1*
@@ -139,7 +139,7 @@ function install_monkey {
 	--safe-free \
 	--default-user=monkey \
 	--default-port=80 \
-	--enable-plugins=auth,liana,liana_ssl,logger,fastcgi,dirlisting,auth,polarssl,palm,mandril,cheetah,reverse_proxy
+	--enable-plugins=auth,liana,logger,fastcgi,dirlisting,auth,mbedtls,mandril,cheetah,reverse_proxy
 
 
 	echo "Compiling and installing monkey web server..."
